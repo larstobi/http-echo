@@ -1,6 +1,12 @@
-FROM scratch
-LABEL maintainer "Seth Vargo <seth@sethvargo.com> (@sethvargo)"
+FROM golang:1.17 as builder
+ENV CGO_ENABLED=0
 
-ADD "https://curl.haxx.se/ca/cacert.pem" "/etc/ssl/certs/ca-certificates.crt"
-ADD "./pkg/linux_amd64/http-echo" "/"
+COPY . /app
+WORKDIR /app
+
+RUN go build -ldflags "-s -w" -o /http-echo
+
+FROM scratch
+COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
+COPY --from=builder /http-echo /
 ENTRYPOINT ["/http-echo"]
