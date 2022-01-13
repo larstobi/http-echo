@@ -9,8 +9,6 @@ import (
 	"os"
 	"os/signal"
 	"time"
-
-	"github.com/hashicorp/http-echo/version"
 )
 
 var (
@@ -28,7 +26,7 @@ func main() {
 
 	// Asking for the version?
 	if *versionFlag {
-		fmt.Fprintln(stderrW, version.HumanVersion)
+		fmt.Fprintln(stderrW, HumanVersion)
 		os.Exit(0)
 	}
 
